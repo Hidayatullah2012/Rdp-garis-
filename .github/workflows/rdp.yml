@@ -1,0 +1,21 @@
+name: Free RDP
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup RDP
+        run: |
+          sudo apt update
+          sudo apt install -y xfce4 xfce4-goodies xrdp
+          sudo systemctl enable xrdp
+          sudo systemctl start xrdp
+          echo "root:password" | sudo chpasswd
+          echo xfce4-session > ~/.xsession
+          sudo usermod -aG sudo root
+          sudo apt install -y wget
+          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+          unzip ngrok-stable-linux-amd64.zip
+          chmod +x ngrok
+          ./ngrok authtoken add-authtoken2tq9MToGcGB6BFgIYaJL3CruFpA_74nqdk6x1wR7C66GeRBTw
+          ./ngrok tcp 3389
